@@ -138,6 +138,12 @@ class FacebookWebDriver extends CoreDriver
             }
         }
 
+        // Hack to allow disabling of w3c in modern behat.yml
+        if (isset($desiredCapabilities['chromeOptions'])) {
+            $desiredCapabilities['chrome'] = array_merge($desiredCapabilities['chrome'], $desiredCapabilities['chromeOptions']);
+            unset($desiredCapabilities['chromeOptions']);
+        }
+        
         // Merge in other requested types
         foreach ($desiredCapabilities as $key => $value) {
             switch ($key) {
