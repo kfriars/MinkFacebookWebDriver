@@ -760,7 +760,21 @@ JS;
         $value = strval($value);
 
         if (in_array($elementName, array('input', 'textarea'))) {
-            $element->clear();
+            // If we have input to enter, it will properly set the inputs value so 
+            // we can just clear
+            if (strlen($value) > 0) {
+                $element->clear();
+            
+            // If we are trying to clear the input, we need to use backspaces to have
+            // its value update correctly
+            } else {
+                $text = $element->getAttribute('value');
+                $length = strlen($text);
+                while ($length > 0) {
+                    $element->sendKeys("\xEE\x80\x83"); // Backspace
+                    $length--;
+                }
+            }
         }
 
         $element->sendKeys($value);
